@@ -18,6 +18,8 @@ Every user-facing change should have an entry in this changelog. Please respect 
 
 ## Unreleased
 
+- [Improvement] Faster and more reliable builds with `npm clean-install` instead of `npm install`. (by @regisb. Thanks @ghassanmas!)
+
 ## v13.2.2 (2022-05-06)
 
 - [Fix] Mounts were broken in dev mode. (by @kdmccormick)

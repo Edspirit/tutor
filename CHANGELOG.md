@@ -18,6 +18,24 @@ Every user-facing change should have an entry in this changelog. Please respect 
 
 ## Unreleased
 
+- [Bugfix] Fix `tutor dev start -m /path/to/frontend-app-learning` by introducing dev-specific `COMPOSE_DEV_TMP` and `COMPOSE_DEV_JOBS_TMP` filters (by @regisb).
+- [Bugfix] Log the shell commands that Tutor executes more accurately. (by @kdmccormick)
+- [Bugfix] `tutor dev quickstart` would fail under certain versions of docker-compose due to a bug in the logic that handled volume mounting. (by @kdmccormick)
+- [Bugfix] The `tutor k8s start` command will succeed even when `k8s-override` and `kustomization-patches-strategic-merge` are not specified. (by @edazzocaisser)
+- [BugFix] `kubectl wait` checks deployments instead of pods as it could hang indefinitely if there are extra pods in a broken state. (by @keithgg)
+
+## v14.0.3 (2022-07-09)
+
+- [Bugfix] Build openedx-dev Docker image even when the host user is root, for instance on Windows. (by @regisb)
+- [Bugfix] Patch nutmeg.1 release with [LTI 1.3 fix](https://github.com/openedx/edx-platform/pull/30716). (by @ormsbee)
+- [Improvement] Make it possible to override k8s resources in plugins using `k8s-override` patch. (by @foadlind)
+
+## v14.0.2 (2022-06-27)
+
+- [Bugfix] Update problem with hint template so it works with newer python versions. (by @mariajgrimaldi)
+- [Feature] Add default PYTHONBREAKPOINT to openedx/Dockerfile (by @Carlos-Muniz)
+- [Bugfix] Fix smtp server port in `cms.yml` which was causing email sending failures in the Studio. (by @regisb)
+- [Bugfix] Skip waiting for MongoDB if it is served using SRV records. (by @gabor-boros)
 - [Improvement] Use `git am` instead of `cherry-pick` to simplify patching process.
 
 ## v14.0.1 (2022-06-13)

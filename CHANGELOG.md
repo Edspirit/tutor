@@ -18,8 +18,6 @@ Every user-facing change should have an entry in this changelog. Please respect 
 
 ## Unreleased
 
-- [Feature] Add the `-m/--mount` option to `tutor dev quickstart`.
-- [Bugfix] Fix `tutor dev start -m /path/to/frontend-app-learning` by introducing dev-specific `COMPOSE_DEV_TMP` and `COMPOSE_DEV_JOBS_TMP` filters (by @regisb).
 - [Bugfix] Log the shell commands that Tutor executes more accurately. (by @kdmccormick)
 - [Bugfix] `tutor dev quickstart` would fail under certain versions of docker-compose due to a bug in the logic that handled volume mounting. (by @kdmccormick)
 - [Bugfix] The `tutor k8s start` command will succeed even when `k8s-override` and `kustomization-patches-strategic-merge` are not specified. (by @edazzocaisser)
@@ -54,8 +52,10 @@ Every user-facing change should have an entry in this changelog. Please respect 
   - [Improvement] For Tutor Nightly (and only Nightly), official plugins are now installed from their nightly branches on GitHub instead of a version range on PyPI. This will allow Nightly users to install all official plugins by running ``pip install -e ".[full]"``.
   - [Bugfix] Start MongoDB when running migrations, because a new data migration fails if MongoDB is not running
 
-## v13.3.1 (2022-06-06)
+## v13.3.1 (2022-07-31)
 
+- [Feature] Add the `-m/--mount` option to `tutor dev quickstart` (cherry-picked by @moonesque from unreleased).
+- [Bugfix] Fix `tutor dev start -m /path/to/frontend-app-learning` by introducing dev-specific `COMPOSE_DEV_TMP` and `COMPOSE_DEV_JOBS_TMP` filters (by @regisb) (cherry-picked by @moonesque from unreleased).
 - [Fix] Crashing celery workers in development (#681). (by @regisb)
 - [Fix] Fix studio logout issue. (by @Alec4r)
 

@@ -18,6 +18,11 @@ Every user-facing change should have an entry in this changelog. Please respect 
 
 ## Unreleased
 
+## v13.3.2 (2022-07-31)
+
+- [Feature] Add the `-m/--mount` option to `tutor dev quickstart` (cherry-picked by @moonesque from v14.0.4 (2022-07-29)).
+- [Bugfix] Fix `tutor dev start -m /path/to/frontend-app-learning` by introducing dev-specific `COMPOSE_DEV_TMP` and `COMPOSE_DEV_JOBS_TMP` filters (by @regisb) (cherry-picked by @moonesque from v14.0.4 (2022-07-29)).
+
 ## v13.3.1 (2022-06-06)
 
 - [Fix] Crashing celery workers in development (#681). (by @regisb)

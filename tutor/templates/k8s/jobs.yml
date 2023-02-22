@@ -6,6 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/component: job
 spec:
+  ttlSecondsAfterFinished: 86400  # 24 Hours
   template:
     spec:
       restartPolicy: Never
@@ -42,6 +43,7 @@ metadata:
   labels:
     app.kubernetes.io/component: job
 spec:
+  ttlSecondsAfterFinished: 86400  # 24 Hours
   template:
     spec:
       restartPolicy: Never
@@ -78,6 +80,7 @@ metadata:
   labels:
     app.kubernetes.io/component: job
 spec:
+  ttlSecondsAfterFinished: 86400  # 24 Hours
   template:
     spec:
       restartPolicy: Never

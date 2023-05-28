@@ -22,7 +22,13 @@ class K8sClients:
         # Loading the kubernetes module here to avoid import overhead
         from kubernetes import client, config  # pylint: disable=import-outside-toplevel
 
-        config.load_kube_config()
+        try:
+            config.load_incluster_config()
+        except config.ConfigException:
+            fmt.echo_info(
+                "Unable to load in-cluster configuration. Falling back to kubeconfig."
+            )
+            config.load_kube_config()
         self._batch_api = None
         self._core_api = None
         self._client = client

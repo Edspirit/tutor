@@ -111,8 +111,8 @@ class K8sJobRunner(jobs.BaseJobRunner):
         else:
             container_args = shell_command + [command]
         job["spec"]["template"]["spec"]["containers"][0]["args"] = container_args
-        job["spec"]["backoffLimit"] = 1
-        job["spec"]["ttlSecondsAfterFinished"] = 3600
+        job["spec"]["backoffLimit"] = 10
+        job["spec"]["ttlSecondsAfterFinished"] = 36000
         # Save patched job to "jobs.yml" file
         with open(
             tutor_env.pathjoin(self.root, "k8s", "jobs.yml"), "w", encoding="utf-8"

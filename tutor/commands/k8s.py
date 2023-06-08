@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from time import sleep
 from typing import Any, List, Optional, Type
@@ -22,13 +23,19 @@ class K8sClients:
         # Loading the kubernetes module here to avoid import overhead
         from kubernetes import client, config  # pylint: disable=import-outside-toplevel
 
-        try:
-            config.load_incluster_config()
-        except config.ConfigException:
-            fmt.echo_info(
-                "Unable to load in-cluster configuration. Falling back to kubeconfig."
-            )
+        if os.path.exists(config.kube_config.KUBE_CONFIG_DEFAULT_LOCATION):
+            # found the kubeconfig file, let's load it!
             config.load_kube_config()
+        elif (
+            config.incluster_config.SERVICE_HOST_ENV_NAME in os.environ
+            and config.incluster_config.SERVICE_PORT_ENV_NAME in os.environ
+        ):
+            # We are running inside a cluster, let's load the in-cluster configuration.
+            config.load_incluster_config()
+        else:
+            raise exceptions.TutorError(
+                f"there is no Kubernetes configuration file located in {config.kube_config.KUBE_CONFIG_DEFAULT_LOCATION}, and the service environment variables {config.incluster_config.SERVICE_HOST_ENV_NAME} and {config.incluster_config.SERVICE_PORT_ENV_NAME} have not been defined. To connect to a cluster, please configure your host appropriately."
+            )
         self._batch_api = None
         self._core_api = None
         self._client = client
@@ -112,7 +119,7 @@ class K8sJobRunner(jobs.BaseJobRunner):
             container_args = shell_command + [command]
         job["spec"]["template"]["spec"]["containers"][0]["args"] = container_args
         job["spec"]["backoffLimit"] = 10
-        job["spec"]["ttlSecondsAfterFinished"] = 36000
+        job["spec"]["ttlSecondsAfterFinished"] = 72000  # 24 hours
         # Save patched job to "jobs.yml" file
         with open(
             tutor_env.pathjoin(self.root, "k8s", "jobs.yml"), "w", encoding="utf-8"

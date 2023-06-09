@@ -27,10 +27,6 @@ class K8sClients:
             config.load_kube_config()
         except:
             config.load_incluster_config()
-        else:
-            raise exceptions.TutorError(
-                f"there is no Kubernetes configuration file located in {config.kube_config.KUBE_CONFIG_DEFAULT_LOCATION}, and the service environment variables {config.incluster_config.SERVICE_HOST_ENV_NAME} and {config.incluster_config.SERVICE_PORT_ENV_NAME} have not been defined. To connect to a cluster, please configure your host appropriately."
-            )
         self._batch_api = None
         self._core_api = None
         self._client = client

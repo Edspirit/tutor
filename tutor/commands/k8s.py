@@ -23,14 +23,9 @@ class K8sClients:
         # Loading the kubernetes module here to avoid import overhead
         from kubernetes import client, config  # pylint: disable=import-outside-toplevel
 
-        if os.path.exists(config.kube_config.KUBE_CONFIG_DEFAULT_LOCATION):
-            # found the kubeconfig file, let's load it!
+        try:
             config.load_kube_config()
-        elif (
-            config.incluster_config.SERVICE_HOST_ENV_NAME in os.environ
-            and config.incluster_config.SERVICE_PORT_ENV_NAME in os.environ
-        ):
-            # We are running inside a cluster, let's load the in-cluster configuration.
+        except:
             config.load_incluster_config()
         else:
             raise exceptions.TutorError(

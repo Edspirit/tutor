@@ -113,8 +113,8 @@ class K8sTaskRunner(BaseTaskRunner):
         else:
             container_args = shell_command + [command]
         job["spec"]["template"]["spec"]["containers"][0]["args"] = container_args
-        job["spec"]["backoffLimit"] = 1
-        job["spec"]["ttlSecondsAfterFinished"] = 3600
+        job["spec"]["backoffLimit"] = 5
+        job["spec"]["ttlSecondsAfterFinished"] = 72000  # 24 hours
 
         with open(
             tutor_env.pathjoin(self.root, "k8s", "jobs.yml"), "w", encoding="utf-8"

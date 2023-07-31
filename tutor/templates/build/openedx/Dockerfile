@@ -92,6 +92,9 @@ RUN {% if is_buildkit_enabled() %}--mount=type=cache,target=/openedx/.cache/pip,
 RUN pip install https://github.com/overhangio/py2neo/releases/download/2021.2.3/py2neo-2021.2.3.tar.gz
 
 # Install base requirements
+{% if not is_buildkit_enabled() %}
+COPY --from=edx-platform /requirements/edx/base.txt /openedx/edx-platform/requirements/edx/base.txt
+{% endif %}
 RUN {% if is_buildkit_enabled() %}--mount=type=bind,from=edx-platform,source=/requirements/edx/base.txt,target=/openedx/edx-platform/requirements/edx/base.txt \
     --mount=type=cache,target=/openedx/.cache/pip,sharing=shared {% endif %}pip install -r /openedx/edx-platform/requirements/edx/base.txt
 
@@ -126,6 +129,10 @@ RUN nodeenv /openedx/nodeenv --node=16.14.0 --prebuilt
 # Install nodejs requirements
 ARG NPM_REGISTRY={{ NPM_REGISTRY }}
 WORKDIR /openedx/edx-platform
+{% if not is_buildkit_enabled() %}
+COPY --from=edx-platform /package.json /openedx/edx-platform/package.json
+COPY --from=edx-platform /package-lock.json /openedx/edx-platform/package-lock.json
+{% endif %}
 RUN {% if is_buildkit_enabled() %}--mount=type=bind,from=edx-platform,source=/package.json,target=/openedx/edx-platform/package.json \
     --mount=type=bind,from=edx-platform,source=/package-lock.json,target=/openedx/edx-platform/package-lock.json \
     --mount=type=cache,target=/root/.npm,sharing=shared {% endif %}npm clean-install --no-audit --registry=$NPM_REGISTRY

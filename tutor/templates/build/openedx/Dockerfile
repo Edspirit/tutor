@@ -69,6 +69,9 @@ RUN apt update && apt install -y software-properties-common libmysqlclient-dev l
 # https://pypi.org/project/wheel/
 RUN pip install setuptools==65.5.1 pip==22.3.1. wheel==0.38.4
 
+# Install missing py2neo package that was abruptly trimmed from pypi
+RUN pip install https://github.com/overhangio/py2neo/releases/download/2021.2.3/py2neo-2021.2.3.tar.gz
+
 # Install base requirements
 COPY --from=code /openedx/edx-platform/requirements/edx/base.txt /tmp/base.txt
 RUN pip install -r /tmp/base.txt

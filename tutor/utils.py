@@ -204,6 +204,9 @@ def is_docker_rootless() -> bool:
         return "rootless" in results.stdout.decode()
     except subprocess.CalledProcessError:
         return False
+    # if tutor is being called in docker containers, it will not have access to docker as it is not installed
+    except FileNotFoundError:
+        return False
 
 
 def docker_compose(*command: str) -> int:

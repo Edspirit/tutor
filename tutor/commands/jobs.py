@@ -315,6 +315,29 @@ def sqlshell(args: list[str]) -> t.Iterable[tuple[str, str]]:
     yield ("lms", command)
 
 
+@click.argument("new_domain")
+@click.argument("old_domain")
+@click.command()
+def set_new_domain(old_domain: str, new_domain: str) -> t.Iterable[tuple[str, str]]:
+    """
+    Preparing an instance to use the new domain.
+    The first thing to do is saving tutor with the new domain.
+    after that you need to configure Site and SiteConfiguration models to point to this domain.
+    """
+    python_command = f"""
+from openedx.core.djangoapps.site_configuration.models import SiteConfiguration
+from django.contrib.sites.models import Site
+
+old_site_config_value = SiteConfiguration.objects.get(site__name = '{old_domain}').site_values
+new_site_obj, _ = Site.objects.get_or_create(domain = '{new_domain}', defaults = {{'name':'{new_domain}'}})
+site_config, created = SiteConfiguration.objects.get_or_create(site = new_site_obj)
+site_config.site_values = old_site_config_value
+site_config.enabled = True
+site_config.save()
+"""
+    yield ("lms", f'./manage.py lms shell -c "{python_command}"')
+
+
 def add_job_commands(do_command_group: click.Group) -> None:
     """
     This is meant to be called with the `local/dev/k8s do` group commands, to add the
@@ -397,5 +420,6 @@ hooks.Filters.CLI_DO_COMMANDS.add_items(
         print_edx_platform_setting,
         settheme,
         sqlshell,
+        set_new_domain,
     ]
 )
